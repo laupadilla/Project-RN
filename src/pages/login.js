@@ -3,11 +3,26 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import api from '../services/api';
 
 export default class Login extends Component {
-    // static navigationOptions = {
-    //     title: 'Login'
-    // };
+    static navigationOptions = {
+        title: 'App'
+    };
 
-    state = {};
+    state = {
+        email: '',
+        password: ''
+    };
+
+    sigin = async () => {
+        const response = await api.post(`/authenticate`, {
+            'email': this.state.email,
+            'password': this.state.password
+        });
+
+        console.log(response);
+
+        if(response.data.user.email === this.state.email)
+            this.props.navigation.navigate('EventList', response.data.user.name);
+    }
 
     render() {
         return (
@@ -15,23 +30,28 @@ export default class Login extends Component {
                 <TextInput
                     style={styles.textInput}
                     placeholder="Digite aqui o seu email"
-                    // onChangeText={(text) => this.setState({text})}
-                    // value={this.state.text}
+                    onChangeText = {(email) => this.setState({email})}
+                    value={this.state.email}
                 />
                 <TextInput
                     style={styles.textInput}
                     placeholder="Digite aqui a sua senha"
-                    // onChangeText={(text) => this.setState({text})}
-                    // value={this.state.text}
+                    onChangeText = {(password) => this.setState({password})}
+                    value={this.state.password}
+                    secureTextEntry={ true }
                 />
                 <TouchableOpacity 
                     style={styles.productButton} 
-                    // onPress={() => {
-                    //     this.props.navigation.navigate('Product', { product: item })
-                    // }}
+                    onPress={this.sigin}
                     >
                     <Text style={styles.productButtonText}>Acessar</Text>
                 </TouchableOpacity>
+
+                <Text style= { {marginTop: 20} }>Não possui conta?</Text>
+                <Text 
+                    style= { {marginTop: 2, fontWeight: 'bold', color: '#d62b2c'} }
+                    onPress = {() => this.props.navigation.navigate('Register')}
+                    >Criar</Text>
             </View>
         )
     }
@@ -46,12 +66,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#ecf0f1',
     },
     textInput: { 
-        height: 40,
+        height: 50,
         width: 250,
         marginBottom: 15,
         borderColor: "#d62b2c",
         borderRadius: 5,
-        borderWidth: 1
+        borderWidth: 1,
+        padding: 15
     },
     productButton: {
         height: 42,
@@ -61,8 +82,7 @@ const styles = StyleSheet.create({
         borderColor: '#d62b2c',
         backgroundColor: 'transparent',
         justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 10
+        alignItems: 'center'
     },
     productButtonText: {
         fontSize: 16,

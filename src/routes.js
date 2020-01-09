@@ -1,13 +1,17 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-// import Main from './pages/main';
+import React, { Component } from 'react';
+import Main from './pages/main';
 import Login from './pages/login';
-import Product from './pages/product';
-
+import EventListScreen from './pages/eventList';
+import Register from './pages/register';
+// import Product from './pages/product';
 
 const RootStack = createStackNavigator({ 
+    Main,
     Login,
-    Product
+    Register,
+    EventList: EventListScreen,
  },
  {
     initialRouteName: 'Login',
@@ -15,7 +19,7 @@ const RootStack = createStackNavigator({
         headerStyle: { 
             backgroundColor: '#d62b2c'
         },
-        headerTintColor: '#FFF'
+            headerTintColor: '#FFF'
         }
  });
 
